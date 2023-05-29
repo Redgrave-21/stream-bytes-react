@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import formStyles from '../../styles/forms.module.css';
+import { postNewComment } from '../../helpers/RequestHelper';
 
 import axios from 'axios';
 
@@ -14,17 +15,14 @@ export default function AddCommentForm({ videoId }) {
     const submitCommentForm = (event) => {
         event.preventDefault();
         const form = event.target;
+        console.log(form)
         const formData = new FormData(form);
 
         // better rename this to urlencoded form later
         //seperate out all the requests into a seperate context
         const actualFormData = Object.fromEntries(formData.entries());
         console.log("comment form data is", actualFormData);
-
-        axios.post(`http://localhost:4000/video/${videoId}/comments`, { commentText: actualFormData.commentText }, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
-
-
-
+        postNewComment(videoId,actualFormData);
 
     }
 

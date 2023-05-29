@@ -1,13 +1,13 @@
 /* Valid for login and sign up forms */
-.FormDiv{
+.formDiv{
     text-align: center;
 }
 
-.FormElement{
+.formElement{
     margin:10px;
 }
 
-.FormElement>.FormElementLabel{
+.formElement>.formElementLabel{
     display: inline-block;
     width: 150px;
     /* padding-left: 5px; */
@@ -16,7 +16,7 @@
     margin-right:5px;
 }
 
-.FormElement>.formElementInput{
+.formElement>.formElementInput{
     display:inline-block;
     margin-left:5px;
     margin-right:5px

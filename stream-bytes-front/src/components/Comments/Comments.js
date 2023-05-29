@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import axios from 'axios';
+import { getVideoComments } from '../../helpers/RequestHelper';
 
 
 export default function Comments({ videoId }) {
@@ -15,9 +15,9 @@ export default function Comments({ videoId }) {
 
     React.useEffect(() => {
         async function getComments() {
-            const commentsResult = await axios.get(`http://localhost:4000/video/${videoId}/comments`)
-            setComments(commentsResult.data.comments);
-            console.log("fetched comment data is ", commentsResult.data.comments);
+            const result = await getVideoComments(videoId)
+            setComments(result.comments);
+            console.log("fetched comment data is ", result.comments);
         }
         getComments();
     }, []);
@@ -47,7 +47,7 @@ export default function Comments({ videoId }) {
                                                     {comment ? comment.text : "comments should go here"}
                                                 </span>
                                             </Col>
-                                              
+
                                         </Row>
                                     </span>
                                 </div>

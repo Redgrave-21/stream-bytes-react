@@ -12,6 +12,7 @@ import SimilarContent from '../components/Similar-content/SimilarContent';
 import { useParams } from 'react-router-dom';
 import { AiFillLike } from 'react-icons/ai';
 import { AiFillDislike } from 'react-icons/ai';
+import { getVideoDataForPlayerPage } from '../helpers/RequestHelper';
 
 
 import axios from 'axios';
@@ -26,10 +27,9 @@ export default function VideoPlayerPage() {
 
     React.useEffect(() => {
         async function getVideoData() {
-            const result = await axios.get(`http://localhost:4000/video/${videoId}/data`);
-            // (result ? setVideoData(result.data) : setVideoData('something else'))
-            setVideoData(result.data)
-            console.log("fetched video data is ", result.data)
+            const result = await getVideoDataForPlayerPage(videoId)
+            setVideoData(result)
+            console.log("fetched video data is ", result)
         };
         getVideoData();
     }, [])
@@ -62,8 +62,6 @@ export default function VideoPlayerPage() {
     return (
         <Container fluid>
             <div className={divStyles.VideoPlayerPageRoot}>
-
-
                 <Row>
                     <Col md={7} lg={8} >
                         <Row>
@@ -94,18 +92,27 @@ export default function VideoPlayerPage() {
                                         </Row>
                                     </div>
                                     <Row>
-                                        <Col className={divStyles.profileCol} xs={1}>
-                                            <div className={divStyles.creatorDiv}>
-                                                <div>
-                                                    <img className={imageStyles.profileThumbVideoPage} src={profile} />
+                                        <Accordion flush>
+                                            <Accordion.Header>
+                                                <div className={divStyles.creatorDiv}>
+                                                    <div>
+                                                        <Row>
+                                                            <Col className={divStyles.profileCol} xs={1}>
+                                                                <img className={imageStyles.profileThumbVideoPage} src={profile} />
+                                                            </Col>
+                                                            <Col>
+                                                                <p>{videoData ? videoData.author : "video Author"}</p>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Col>
-                                        <Col>
-                                            <div className={divStyles.creatorDivPara}>
-                                                <p>{videoData ? videoData.author : "video Author"}</p>
-                                            </div>
-                                        </Col>
+                                            </Accordion.Header>
+                                            <Accordion.Body>
+                                                <div className={divStyles.creatorDivPara}>
+                                                    <p>{videoData ? videoData.description : "Video Description   "}</p>
+                                                </div>
+                                            </Accordion.Body>
+                                        </Accordion>
                                     </Row>
                                 </div>
                             </Col>
