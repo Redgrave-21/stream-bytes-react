@@ -1,0 +1,107 @@
+/* card for video on index page */
+
+.card{
+    margin-top: 5px;
+    margin-bottom:5px;
+    border: none;
+    }
+    
+.cardBody{
+        margin: 0;
+        padding-left: 0;
+}
+    
+/* ************ */
+
+/* video player page */
+.VideoPlayerPageRoot{
+    margin: 20px;
+    padding:10px;
+}
+
+.titleDiv{
+    margin:0;
+    margin-bottom: 20px;
+
+}    
+
+.titleDiv p{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        /* fallback style for firefox */
+        line-height: 1.5em;
+        max-height: line-height*2;
+}
+    
+.titleDiv>h4{
+    overflow-wrap: break-word;
+    margin-left:20px
+}
+
+.creatorDiv{
+    display: inline-block;
+}
+
+.creatorDivPara{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+.row{
+    padding-left: 0;
+    padding-right: 0;
+}
+    
+.row col{
+        padding:0;
+}
+    
+.profileCol{
+    width:max-content;
+    
+}
+    
+.titleDiv>span{
+        overflow: hidden;
+        text-overflow: ellipsis;
+}
+
+.videoPlayer{
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom:20px;
+    padding:0;
+}
+
+
+/* comment list om video player page*/
+.commentList{
+    margin:20px;
+    list-style-type: none
+}
+
+/* user homepage */
+.AccountHomeDiv{
+    margin-top:20px;
+    display: inline-block;
+}
+
+@media screen and (max-width: 400px) {
+    .videoPlayer{
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-bottom:20px;;
+        padding:0;
+    }
+
+    .titleDiv>h4{
+        overflow-wrap: break-word;
+        margin-left:20px
+    }
+
+      }

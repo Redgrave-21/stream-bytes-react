@@ -1,0 +1,60 @@
+/* Valid for login and sign up forms */
+.FormDiv{
+    text-align: center;
+}
+
+.FormElement{
+    margin:10px;
+}
+
+.FormElement>.FormElementLabel{
+    display: inline-block;
+    width: 150px;
+    /* padding-left: 5px; */
+    /* padding-right:5px; */
+    margin-left:5px;
+    margin-right:5px;
+}
+
+.FormElement>.formElementInput{
+    display:inline-block;
+    margin-left:5px;
+    margin-right:5px
+}
+
+/* search form */
+.searchForm{
+    display:flex;
+    margin-left: 0;
+}
+
+
+/* for add comment form  */
+/* .AddCommentFormDiv{
+
+} */
+
+.addCommentFormDiv>.addCommentFormLabel{
+    visibility: hidden;
+}
+
+.addCommentFormInput>input{
+    width: 100%;
+}
+
+.addCommentFormButtons{
+    margin-top: 5px;
+    text-align: right;
+}
+
+.resetNewCommentButton{
+    background-color: #555;
+    border-color:#555;
+    margin-right:5px
+}
+
+.addNewCommentButton{
+    background-color: #fbc349;
+    border-color:#fbc349;
+    margin-left:5px;
+}

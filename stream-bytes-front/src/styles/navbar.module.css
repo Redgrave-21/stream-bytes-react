@@ -1,0 +1,7 @@
+.navigationBar{
+    max-height: 100px;
+}
+
+#navBarScroll{
+    margin-block-end: 10px;
+}
