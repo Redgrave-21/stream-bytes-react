@@ -1,7 +1,7 @@
 import React from 'react';
 import profile from '../../styles/scarface.4.jpeg';
-import divStyles from '../../styles/divStyles.module.css';
-import imageStyles from '../../styles/images.module.css';
+import divStyles from '../../styles/div.module.css';
+import imageStyles from '../../styles/image.module.css';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
@@ -34,7 +34,7 @@ export default function Comments({ videoId }) {
                     {comments ? console.log(comments) : console.log("there are no comments")}
                     {comments ? comments.map((comment) => (
                         <li key={comment._id}>
-                            <Card>
+                            <Card className={divStyles.commentCard}>
                                 <div>
                                     <span className={divStyles.profileCol}>
                                         <Row>
@@ -42,8 +42,10 @@ export default function Comments({ videoId }) {
                                                 <img className={imageStyles.profileThumb} src={profile} />
                                             </Col>
                                             <Col>
-                                                <p>{comment.author} </p>
-                                                <span>
+                                                <div className={divStyles.commentAuthor}>
+                                                    <p>{comment.author} </p>
+                                                </div>
+                                                <span className={divStyles.commentText}>
                                                     {comment ? comment.text : "comments should go here"}
                                                 </span>
                                             </Col>
@@ -51,7 +53,7 @@ export default function Comments({ videoId }) {
                                         </Row>
                                     </span>
                                 </div>
-                            </Card>
+                            </Card> 
                         </li>
                     )) : null}
                 </ul>

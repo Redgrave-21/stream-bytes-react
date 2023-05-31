@@ -87,6 +87,21 @@
     list-style-type: none
 }
 
+.commentCard{
+    margin-top: 10px;
+    border-radius: 0;
+    border-right:none;
+    border-left:none;
+}
+
+.commentAuthor{
+    margin-left:10px;
+}
+
+.commentText{
+    margin-left:10px;
+}
+
 /* user homepage */
 .AccountHomeDiv{
     margin-top:20px;

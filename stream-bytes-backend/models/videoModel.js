@@ -44,9 +44,9 @@ const videoSchema = new mongoose.Schema({
         type: String,
     },
 
-    views:{
+    views: {
         type: Number,
-        default:0
+        default: 0
     }
 })
 

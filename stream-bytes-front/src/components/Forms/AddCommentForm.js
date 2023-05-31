@@ -3,10 +3,8 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import formStyles from '../../styles/forms.module.css';
-import { postNewComment } from '../../helpers/RequestHelper';
-
-import axios from 'axios';
+import formStyles from '../../styles/form.module.css';
+import { postNewCommentForm } from '../../helpers/RequestHelper';
 
 
 export default function AddCommentForm({ videoId }) {
@@ -22,7 +20,7 @@ export default function AddCommentForm({ videoId }) {
         //seperate out all the requests into a seperate context
         const actualFormData = Object.fromEntries(formData.entries());
         console.log("comment form data is", actualFormData);
-        postNewComment(videoId,actualFormData);
+        postNewCommentForm(videoId,actualFormData);
 
     }
 

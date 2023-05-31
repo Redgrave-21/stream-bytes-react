@@ -3,8 +3,8 @@ import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import divStyles from '../../styles/divStyles.module.css';
-import imageStyles from '../../styles/images.module.css';
+import divStyles from '../../styles/div.module.css';
+import imageStyles from '../../styles/image.module.css';
 
 // temp
 import video from '../../styles/scarface.4.jpeg';

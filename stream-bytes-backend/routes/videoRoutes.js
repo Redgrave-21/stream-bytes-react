@@ -9,11 +9,11 @@ const commentModel = require('../models/commentModel');
 videoRouter.get('/watch/:id', async (req, res) => {
     try {
         // console.log("video id is", req.params.id);
-        const videoToPlay = await videoModel.findByIdAndUpdate(req.params.id)//newly added
+        const videoToPlay = await videoModel.findByIdAndUpdate(req.params.id);
         const videoLocation = videoToPlay.location;
 
-        const stat = fs.statSync(videoLocation)
-        const fileSize = stat.size
+        const stat = fs.statSync(videoLocation);
+        const fileSize = stat.size;
         const range = req.headers.range;
         if (range) {
             const parts = range.replace(/bytes=/, "").split("-")
@@ -45,8 +45,8 @@ videoRouter.get('/watch/:id', async (req, res) => {
             res.writeHead(206, head);
         }
     }
-    catch (e) {
-        console.log(e);
+    catch (error) {
+        console.log(error);
     }
 })
 
@@ -56,10 +56,12 @@ videoRouter.get('/video/:id/data', async (req, res) => {
         console.log("id from send video information ", req.params.id)
         const videoData = await videoModel.findById(req.params.id);
         // res.json({ staus: 200, vidoData: videoData });
-        res.json(videoData)
+        res.status(200).json(videoData);
     }
-    catch (e) {
-        console.log("error from send video information function", e)
+    catch (error) {
+        console.log("error from send video information function", e);
+        res.status(404).json("Not Found");
+        next(error);
     }
 })
 
@@ -68,10 +70,13 @@ videoRouter.get('/video/:id/comments', async (req, res) => {
     try {
         console.log("video id from comments route", req.params.id);
         commentsOfVideo = await videoModel.findById(req.params.id).populate('comments');
-        res.json(commentsOfVideo);
+        // res.json(commentsOfVideo);
+        res.status(200).json(commentsOfVideo);
     }
-    catch (e) {
+    catch (error) {
         console.log("error from fetch comment function", e);
+        res.status(400).json("Not Found");
+        next(error)
 
     }
 })

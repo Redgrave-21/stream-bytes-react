@@ -3,7 +3,7 @@ import axios from 'axios';
 /**function to fetch all videos on index page  */
 async function getIndexPageVideos() {
     const result = await axios.get('http://localhost:4000/');
-    console.log(result);
+    console.log(result.data);
     return result.data;
 }
 
@@ -22,18 +22,46 @@ async function getVideoComments(videoId) {
 }
 
 /** Post new comment form*/
-async function postNewComment(videoId, formData) {
-    axios.post(`http://localhost:4000/video/${videoId}/comments`,
+async function postNewCommentForm(videoId, formData) {
+    await axios.post(`http://localhost:4000/video/${videoId}/comments`,
         { commentText: formData.commentText },
-        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+        .then(function (res) {
+            console.log("response from post comment form request", res);
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
 }
 
 /** Post Signup form */
-async function postNewUser(formData) {
-    axios.post('http://localhost:4000/user/signup',
+async function postNewUserForm(formData) {
+    return axios.post('http://localhost:4000/user/signup',
         { formData },
-        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
-
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+        .then(function (res) {
+            console.log(res.data);
+            return (res.data)
+        })
+        .catch(function (err) {
+            console.log(err)
+            return (err)
+        })
 }
 
-export { getIndexPageVideos, getVideoDataForPlayerPage, getVideoComments, postNewComment, postNewUser };
+/**Post login form */
+async function postLoginForm(formData) {
+    return axios.post('http://localhost:4000/user/login',
+        { formData },
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+        .then(function (res) {
+            console.log(res.data);
+            return (res.data)
+        })
+        .catch(function (err) {
+            console.log(err)
+            return (err)
+        })
+}
+
+export { getIndexPageVideos, getVideoDataForPlayerPage, getVideoComments, postNewCommentForm, postNewUserForm, postLoginForm };

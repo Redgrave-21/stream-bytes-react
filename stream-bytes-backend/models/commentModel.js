@@ -1,26 +1,26 @@
-const mongoose= require('mongoose')
+const mongoose = require('mongoose')
 
 var commentSchema = new mongoose.Schema(
-    { 
-        author:{
-            type:String,
-        },
-        text:{
+    {
+        author: {
             type: String,
-            required:true
         },
-        date:{
-            type:Date,
+        text: {
+            type: String,
+            required: true
+        },
+        date: {
+            type: Date,
             default: Date.now
         },
 
-        video:{
+        video: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'vidModel'
 
         }
-       
+
     }
 )
 
-module.exports=mongoose.model('comment',commentSchema)
+module.exports = mongoose.model('comment', commentSchema)

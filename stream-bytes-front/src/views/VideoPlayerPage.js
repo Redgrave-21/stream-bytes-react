@@ -2,10 +2,10 @@ import React from 'react';
 import VideoJS from '../components/VideoJS/VideoJS';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import divStyles from '../styles/divStyles.module.css'
+import divStyles from '../styles/div.module.css'
 import Container from 'react-bootstrap/Container';
 import Accordion from 'react-bootstrap/Accordion';
-import imageStyles from '../styles/images.module.css';
+import imageStyles from '../styles/image.module.css';
 import profile from '../styles/scarface.4.jpeg';
 import Comments from '../components/Comments/Comments'
 import SimilarContent from '../components/Similar-content/SimilarContent';

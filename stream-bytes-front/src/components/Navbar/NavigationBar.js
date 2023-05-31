@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import navStyles from '../../styles/navbar.module.css'
-import formStyles from '../../styles/forms.module.css';
+import formStyles from '../../styles/form.module.css';
 import SideBar from '../SideBar/SideBar';
 import { BiMenu } from 'react-icons/bi';
 

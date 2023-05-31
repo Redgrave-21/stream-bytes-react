@@ -9,23 +9,16 @@ import SignUpForm from '../components/Forms/SignUpForm';
 export default function LoginSignupPage() {
     const [showLoginDiv, setShowLoginDiv] = React.useState(true);
 
+
     function changeCard() {
-        if (showLoginDiv === true) {
-            setShowLoginDiv(false);
-        }
-        else {
-            setShowLoginDiv(true);
-        }
+            setShowLoginDiv(!showLoginDiv);
     }
     return (
         <Container fluid>
             <Row>
                 <Col>
-                    {showLoginDiv ? <LoginForm /> : null}
-                    {showLoginDiv === false ?
-                        <SignUpForm /> : null
-                    }
-                    <Button onClick={changeCard}>Login instead</Button>
+                    {showLoginDiv ? <LoginForm /> : <SignUpForm/>}
+                    <Button  onClick={changeCard}>{showLoginDiv? 'SignUp instead !':'Login instead !'}</Button>
                 </Col>
             </Row>
         </Container>

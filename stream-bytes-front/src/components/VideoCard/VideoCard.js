@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
-import divStyles from '../../styles/divStyles.module.css';
-import imageStyles from '../../styles/images.module.css';
+import divStyles from '../../styles/div.module.css';
+import imageStyles from '../../styles/image.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useNavigate } from 'react-router-dom';
