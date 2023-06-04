@@ -11,6 +11,7 @@ import AccountPage from './views/AccountPage';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import LoginSignupPage from './views/LoginSignupPage';
 import Library from './components/Library/Library';
+import UploadVideoForm from './components/Forms/UploadVideoForm';
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "/library",
     element: <Library />
+  },
+  {
+    path:"/upload",
+    element:<UploadVideoForm/>
   }
 ])
 

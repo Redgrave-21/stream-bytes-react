@@ -23,8 +23,10 @@ export default function SignUpForm() {
                 console.log(res);
                 // find a way to store object in state
                 // setReturnedResponseState(res);
-                setReturnedResponseState({ text: res.text });
-                console.log(returnedResponseState);
+                if (res) {
+                    setReturnedResponseState({ text: res.text });
+                    console.log(returnedResponseState);
+                }
             }
         )
     }

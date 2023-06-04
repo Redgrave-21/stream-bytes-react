@@ -4,8 +4,16 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const path = require('path');
 const bodyParser = require('body-parser');
+
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+// const passport = require('passport');
+const session = require('express-session');
+
+// const SQLiteStore = require('connect-sqlite3')(session);
+const MongoStore = require('connect-mongo');
 
 
 
@@ -18,31 +26,14 @@ const dbName = 'mongodb://localhost/streambytes-dev';
 const videoModel = require('./models/videoModel');
 const commentModel = require('./models/commentModel');
 const userModel = require('./models/userModel');
-
-const videoRoute = require('./routes/videoRoutes');
+const videoRouter = require('./routes/videoRoutes');
 const userRouter = require('./routes/userRoutes');
+const authRouter = require('./auth/auth');
+const verifyToken = require('./routes/verifyToken');
 
 const imagesLocation = path.join(__dirname, "images");
+const config = path.join(__dirname, "config");
 
-
-
-/** allow cors */
-app.use(cors({
-    origin: '*',
-    credentials: false
-}))
-
-/**enable bodyParser */
-app.use(
-    bodyParser.urlencoded({
-        extended: true
-    })
-)
-
-app.use(videoRoute);
-app.use(userRouter);
-
-app.use(express.static(path.join(__dirname,)))
 
 /**establish connection to mongodb */
 async function connectDB() {
@@ -51,18 +42,55 @@ async function connectDB() {
     })
 }
 
+/** allow cors */
+app.use(cors({
+    credentials: true,
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    // allowedHeaders: ['Content-Type','application/x-www-form-urlencoded', 'multipart/form-data'],
+    allowedHeaders:["Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"],
+    preflightContinue: true,
+    optionsSuccessStatus: 204
+}))
+
+/**enable bodyParser */
+app.use(
+    bodyParser.urlencoded({
+        extended: true
+    }),
+)
+
+
+app.use(logger('dev'));
+app.use(cookieParser());
+
+
+app.use(express.static(path.join(__dirname,)))
+
+app.use(session({
+    secret: "Difficult should be walk in the park for you",
+    resave: false,
+    saveUninitialized: false,
+    // store: new SQLiteStore({db:"sessions.db", dir:'./var/db'})
+    store: MongoStore.create({ mongoUrl: dbName, collectionName: "sessions" })
+}));
+
+// app.use(passport.authenticate('session'));
+
+app.use(videoRouter);
+app.use(userRouter);
+app.use(authRouter);
+
+
+
 /** send video data to frontend 
  * rewrite user model to include a seperate field fro commment id
 */
-app.get("/", async (req, res) => {
+app.get("/index", async (req, res) => {
     let videos = [];
     videos = await videoModel.find().sort({ location: 'asc' });
     // res.json(videos);
-    const token = jwt.sign({ uid: 'someUser' }, "69420");
-    console.log("created and signed token is", token);
-    const decodedToken = jwt.verify(token, '69420');
-    console.log("decoded token is ", decodedToken);
-    // res.json(token,videos);
+    // res.setHeader('set-Cookie', ['type=ninja', 'language=javascript; HttpOnly', 'sameSite:none']);
     res.status(200).json(videos);
 })
 
@@ -75,49 +103,7 @@ app.get('/sendimage/:imgName', async (req, res) => {
 });
 
 
-/** add comment to a video
- * add authentication to this route later
- */
-app.post('/video/:id/comments', async (req, res) => {
-    try {
-        const formData = req.body;
-        console.log("form data recieveed from the request is:", formData);
-        const videoId = req.params.id;
-        console.log('video Id recieved from the request is ', videoId);
-        const uId = '6437bc24386d373c9eed1d3a'
-        const findUser = await userModel.findOne({ _id: uId })
-        if (!findUser) {
-            console.log('error occurued when trying to find user by reference to add new comment', err);
-            throw new Error;
-        }
-        else {
-            var comment = new commentModel({
-                text: formData.commentText,
-                author: findUser.userName,
-                video: videoId
-            });
-            // console.log(comment)
-            await comment.save()
-            const videoForComment = await videoModel.findById(videoId);
-            videoForComment.comments.push(comment);
-            await videoForComment.save().then((fulflled, rejected) => {
-                if (fulflled) {
-                    console.log("comment added to video");
-                    res.status(200).json("comment added to Video");
-                }
-                else if (rejected) {
-                    console.log("comment could not be added to video");
-                    res.status(500).json("There was an error adding comment to video");
-                    throw new Error;
-                }
-            });
-        }
-    }
-    catch (error) {
-        console.log("Error occured when trying to add comment to video", error);
-    }
 
-});
 
 app.listen(port, () => console.log(`running on port ${port}`));
 connectDB();

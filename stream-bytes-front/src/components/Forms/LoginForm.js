@@ -14,27 +14,32 @@ export default function LoginForm() {
         text: ''
     })
 
-    function submitLoginForm(event) {
+    async function submitLoginForm(event) {
         event.preventDefault();
         const form = event.target;
         const formData = new FormData(form);
         const actualFormData = Object.fromEntries(formData.entries());
         console.log(actualFormData);
-        postLoginForm(actualFormData).then(
+        await postLoginForm(actualFormData).then(
             (res) => {
                 console.log(res);
-                // find a way to store object in state
-                // setReturnedResponseState(res);
+                if (!res) {
 
-                //keep the below line in case changes need to be made in handling login function response
-                // setReturnedResponseState({ text: res.text });
+                }
+                else {
+                    // find a way to store object in state
+                    // setReturnedResponseState(res);
 
-                setReturnedResponseState({token:res});
+                    //keep the below line in case changes need to be made in handling login function response
+                    // setReturnedResponseState({ text: res.text });
 
-                console.log(returnedResponseState);
-                
-                //store the recieved token in sessionStorage 
-                sessionStorage.setItem('userToken', res);
+                    setReturnedResponseState({ status: res.status, text: res.data }, () => {
+                        console.log(returnedResponseState);
+                    });
+                    // console.log(returnedResponseState);
+
+                    //store the recieved token in sessionStorage 
+                }
             }
         )
     }

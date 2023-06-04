@@ -4,6 +4,7 @@
 }
 
 .formElement{
+    display: block;
     margin:10px;
 }
 
@@ -58,3 +59,11 @@
     border-color:#fbc349;
     margin-left:5px;
 }
+
+/* video upload form  */
+.formElementInput>#videoDescriptionInput{
+    
+
+}
+
+

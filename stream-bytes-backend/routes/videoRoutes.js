@@ -1,12 +1,14 @@
 const express = require('express');
-const videoRouter = express.Router();
+const router = express.Router();
 const fs = require('fs');
 
 const videoModel = require('../models/videoModel');
 const commentModel = require('../models/commentModel');
+const verifyToken = require('./verifyToken');
+
 
 /** watch video */
-videoRouter.get('/watch/:id', async (req, res) => {
+router.get('/watch/:id', async (req, res) => {
     try {
         // console.log("video id is", req.params.id);
         const videoToPlay = await videoModel.findByIdAndUpdate(req.params.id);
@@ -51,34 +53,35 @@ videoRouter.get('/watch/:id', async (req, res) => {
 })
 
 /** send video information for player page*/
-videoRouter.get('/video/:id/data', async (req, res) => {
+router.get('/video/:id/data', async (req, res) => {
+    // if(verifyToken(req.cookies.access_token)){
     try {
         console.log("id from send video information ", req.params.id)
         const videoData = await videoModel.findById(req.params.id);
         // res.json({ staus: 200, vidoData: videoData });
         res.status(200).json(videoData);
     }
-    catch (error) {
-        console.log("error from send video information function", e);
+    catch (err) {
+        console.log("error from send video information function", err);
         res.status(404).json("Not Found");
-        next(error);
     }
+    // }
 })
 
 /** populate video comments */
-videoRouter.get('/video/:id/comments', async (req, res) => {
+router.get('/video/:id/comments', async (req, res) => {
     try {
+        verifyToken(req.cookies.access_token);
         console.log("video id from comments route", req.params.id);
         commentsOfVideo = await videoModel.findById(req.params.id).populate('comments');
         // res.json(commentsOfVideo);
         res.status(200).json(commentsOfVideo);
     }
     catch (error) {
-        console.log("error from fetch comment function", e);
+        console.log("error from fetch comment function", error);
         res.status(400).json("Not Found");
-        next(error)
-
     }
 })
 
-module.exports = videoRouter;
+
+module.exports = router;
