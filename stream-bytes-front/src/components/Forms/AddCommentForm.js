@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import formStyles from '../../styles/form.module.css';
 import { postNewCommentForm } from '../../helpers/RequestHelper';
+// import Cookies from 'js-cookie';
 
 
 export default function AddCommentForm({ videoId }) {
@@ -20,27 +21,35 @@ export default function AddCommentForm({ videoId }) {
         const form = event.target;
         console.log(form)
         const formData = new FormData(form);
+        let sid=2;
+        // let sid = Cookies.get("connect.sid");
+        if (sid) {
+            const actualFormData = Object.fromEntries(formData.entries());
+            console.log("comment form data is", actualFormData);
+            await postNewCommentForm(videoId, actualFormData).then(
+                (res) => {
+                    // console.log(res);
+                    // console.log(res.status);
+                    // console.log(res.data);
+
+                    setResponse({ status: res.status, text: res.data }, () => {
+                        console.log(response);
+                    });
+
+                }
+            )
+        }
+        else {
+            console.log("login to use this features")
+        }
 
         // better rename this to urlencoded form later
         //seperate out all the requests into a seperate context
-        const actualFormData = Object.fromEntries(formData.entries());
-        console.log("comment form data is", actualFormData);
 
         // set response status and text after recieveing respone from method
         // this function works but it is not the preferred way to doing something like this
         // remember to change this in the future
-        await postNewCommentForm(videoId, actualFormData).then(
-            (res) => {
-                // console.log(res);
-                // console.log(res.status);
-                // console.log(res.data);
 
-                setResponse({ status: res.status, text: res.data },()=>{
-                    console.log(response);
-                });
-
-            }
-        )
 
     }
 

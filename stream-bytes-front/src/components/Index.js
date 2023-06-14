@@ -6,23 +6,21 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import VideoCard from '../components/VideoCard/VideoCard';
 import { getIndexPageVideos } from '../helpers/RequestHelper';
-import {AuthContext} from '../contexts/AuthContext';
 
-export default function IndexPage() {
+export default function Index() {
     // declare state for index video data
     const [videoResponse, setVideosResponse] = useState(null);
-    const {isAuthenticated} = useContext(AuthContext);
 
     useEffect(() => {
         async function getIndexVideos(){
             const videos = await getIndexPageVideos();
+            // console.log(videos)
             setVideosResponse(videos);
         }
         getIndexVideos();
     }, [])
 
     return (<Container fluid>
-        {console.log(isAuthenticated)}
         <Row xs={1} md={2} lg={3} xl={3}>
             {videoResponse ? videoResponse.map((videoItem) => (
                 <Col key={videoItem._id}>

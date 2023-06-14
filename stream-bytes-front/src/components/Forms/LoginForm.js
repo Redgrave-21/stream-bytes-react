@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
@@ -6,13 +6,17 @@ import Button from 'react-bootstrap/Button';
 import formStyles from '../../styles/form.module.css';
 
 import { postLoginForm } from '../../helpers/RequestHelper';
+import { AuthContext } from '../../contexts/AuthContext';
 
 export default function LoginForm() {
+    const [isAuthenticated, setIsAuthenticated] = useContext(AuthContext);
 
     const [returnedResponseState, setReturnedResponseState] = useState({
         status: 0,
         text: ''
     })
+
+
 
     async function submitLoginForm(event) {
         event.preventDefault();
@@ -20,32 +24,33 @@ export default function LoginForm() {
         const formData = new FormData(form);
         const actualFormData = Object.fromEntries(formData.entries());
         console.log(actualFormData);
+        console.log("Before updateIsAuthenticated:", isAuthenticated);
         await postLoginForm(actualFormData).then(
             (res) => {
                 console.log(res);
                 if (!res) {
-
+                    console.log("Could not fetch");
                 }
                 else {
-                    // find a way to store object in state
-                    // setReturnedResponseState(res);
 
-                    //keep the below line in case changes need to be made in handling login function response
-                    // setReturnedResponseState({ text: res.text });
-
-                    setReturnedResponseState({ status: res.status, text: res.data }, () => {
+                    console.log("returned response is ", res.data);
+                    setReturnedResponseState({ status: res.status, text: res.data.message }, () => {
                         console.log(returnedResponseState);
                     });
-                    // console.log(returnedResponseState);
 
-                    //store the recieved token in sessionStorage 
+                    if (res.status === 200) {
+                        setIsAuthenticated({isAuthenticated:true, UID:res.data.UID});
+                    }
                 }
-            }
-        )
+            });
+
+        console.log("after updateIsAuthenticated", isAuthenticated);
     }
+
 
     return (
         <div className={formStyles.formDiv} id='loginform'>
+            {/* {console.log(isAuthenticated)} */}
             <form onSubmit={submitLoginForm}>
                 <h5>Login</h5>
                 <div>

@@ -8,7 +8,7 @@ const service = axios.create({
 })
 /**function to fetch all videos on index page  */
 async function getIndexPageVideos() {
-    return await service.get('/index').then(function (res) {
+    return await service.get('/index', { withCredentials: true }).then(function (res) {
         console.log(res);
         return res.data;
     }).catch(function (err) {
@@ -83,7 +83,8 @@ async function postLoginForm(formData) {
     )
         .then(function (res) {
             console.log(res);
-            // return (res.data)
+
+            return (res);
         })
         .catch(function (err) {
             console.log(err)
@@ -95,12 +96,29 @@ async function postLoginForm(formData) {
 async function postVideoUploadForm(formData) {
     console.log(formData);
     return await service.post('/user/upload',
-        { 'title':formData.videoTitle, 'description':formData.videoDescriptionText, 'file':formData.videoInput},
+        { 'title': formData.videoTitle, 'description': formData.videoDescriptionText, 'file': formData.videoInput },
         { headers: { 'Content-Type': 'multipart/form-data' } },
     )
         .then(function (res) {
             console.log(res);
-            // return (res.data)
+            return (res);
+        })
+        .catch(function (err) {
+            console.log(err)
+            return err.response;
+        })
+}
+
+/**Post update video form */
+async function postUpdateVideoForm(videoID,formData) {
+    console.log(formData);
+    return await service.post(`/video/${videoID}/update`,
+        { formData },
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+    )
+        .then(function (res) {
+            console.log(res);
+            return (res);
         })
         .catch(function (err) {
             console.log(err)
@@ -109,4 +127,18 @@ async function postVideoUploadForm(formData) {
 }
 
 
-export { getIndexPageVideos, getVideoDataForPlayerPage, getVideoComments, postNewCommentForm, postNewUserForm, postLoginForm, postVideoUploadForm };
+/**get user data */
+async function getUserData() {
+    // return await service.get(`user/${UID}/home`, { withCredentials: true }).then(function (res) {
+    return await service.get('/user/home/', { withCredentials: true }).then(function (res) {
+        console.log(res);
+        return res.data;
+    }).catch(function (err) {
+        console.log(err);
+        return err.response;
+    })
+
+}
+
+export { getIndexPageVideos, getVideoDataForPlayerPage, getVideoComments, postNewCommentForm, postNewUserForm, postLoginForm, postVideoUploadForm, getUserData,
+    postUpdateVideoForm };

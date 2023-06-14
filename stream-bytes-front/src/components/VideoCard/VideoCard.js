@@ -6,8 +6,8 @@ import imageStyles from '../../styles/image.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useNavigate } from 'react-router-dom';
-// temp
-import profile from '../../temp/scarface.3.jpeg'
+
+import profile from '../../styles/scarface.4.jpeg'
 
 
 export default function VideoCard({ video }) {
@@ -24,12 +24,19 @@ export default function VideoCard({ video }) {
     return (
         <Container fluid>
             <Card className={divStyles.card} onClick={(e) => gotoVideoPlayer(e, video.videoId)}>
+                {console.log(video.thumbnailUrl)}
                 <Card.Img className={imageStyles.videoThumbnail} src={`http://localhost:4000/sendimage/${video.thumbnailUrl}`} alt='video image'></Card.Img>
                 <Card.Body className={divStyles.cardBody}>
+
+                    {/* vidoeo title and author */}
                     <Row className={divStyles.row}>
+
+                        {/* author profile pic */}
                         <Col className={divStyles.profileCol} xs={1}>
                             <img className={imageStyles.profileThumb} src={profile}></img>
                         </Col>
+
+                        {/* video title div */}
                         <Col>
                             <div className={divStyles.titleDiv}>
                                 <p>{video.title}</p>

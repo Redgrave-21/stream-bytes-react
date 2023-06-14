@@ -16,7 +16,6 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 
 
-
 const app = express();
 const port = 4000;
 // const dbPort = 'mongodb://localhost/';
@@ -30,6 +29,7 @@ const videoRouter = require('./routes/videoRoutes');
 const userRouter = require('./routes/userRoutes');
 const authRouter = require('./auth/auth');
 const verifyToken = require('./routes/verifyToken');
+const isAuthenticated = require('./routes/verifySession');
 
 const imagesLocation = path.join(__dirname, "images");
 const config = path.join(__dirname, "config");
@@ -48,7 +48,7 @@ app.use(cors({
     origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     // allowedHeaders: ['Content-Type','application/x-www-form-urlencoded', 'multipart/form-data'],
-    allowedHeaders:["Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"],
+    allowedHeaders: ["Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"],
     preflightContinue: true,
     optionsSuccessStatus: 204
 }))
@@ -61,18 +61,25 @@ app.use(
 )
 
 
+app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(cookieParser());
 
 
 app.use(express.static(path.join(__dirname,)))
+app.use(express.static(('public')));
 
 app.use(session({
+    // genid:function(req){
+    //   return genuuid();  
+    // },
     secret: "Difficult should be walk in the park for you",
     resave: false,
     saveUninitialized: false,
     // store: new SQLiteStore({db:"sessions.db", dir:'./var/db'})
-    store: MongoStore.create({ mongoUrl: dbName, collectionName: "sessions" })
+    store: MongoStore.create({ mongoUrl: dbName, collectionName: "sessions" }),
+    cookie: { maxAge: 30000, httpOnly: false },
+
 }));
 
 // app.use(passport.authenticate('session'));
@@ -88,10 +95,15 @@ app.use(authRouter);
 */
 app.get("/index", async (req, res) => {
     let videos = [];
+    if (req.session) {
+        console.log("UID from session is", req.session.id)
+    }
     videos = await videoModel.find().sort({ location: 'asc' });
     // res.json(videos);
+    // res.json("you are logged in");
     // res.setHeader('set-Cookie', ['type=ninja', 'language=javascript; HttpOnly', 'sameSite:none']);
     res.status(200).json(videos);
+    // res.render('index', {title:'Stream Bytes', videos:videos});
 })
 
 /** send image to frontend */

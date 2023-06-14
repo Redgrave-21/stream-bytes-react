@@ -71,7 +71,6 @@ router.get('/video/:id/data', async (req, res) => {
 /** populate video comments */
 router.get('/video/:id/comments', async (req, res) => {
     try {
-        verifyToken(req.cookies.access_token);
         console.log("video id from comments route", req.params.id);
         commentsOfVideo = await videoModel.findById(req.params.id).populate('comments');
         // res.json(commentsOfVideo);
@@ -83,5 +82,22 @@ router.get('/video/:id/comments', async (req, res) => {
     }
 })
 
+
+/** update existing video details */
+router.post('/video/:id/update',  async (req, res)=>{
+    try{
+        console.log(req.body);
+        const formData = req.body.formData;
+        const videoID = req.params.id;
+        // videoToUpdate = await videoModel.findOne({_id:videoID});
+        // console.log(videoToUpdate);
+        const updatedVideo = await videoModel.findOneAndUpdate({_id:req.params.id}, {$set:{title:formData.videoTitle, description:formData.videoDescription}});
+        await updatedVideo.save();
+        console.log(updatedVideo)
+    }
+    catch(e){
+        console.log("error occured when trying to update a video", e);
+    }
+})
 
 module.exports = router;

@@ -4,30 +4,27 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import divStyles from '../styles/div.module.css'
 import Container from 'react-bootstrap/Container';
-import Accordion from 'react-bootstrap/Accordion';
-import imageStyles from '../styles/image.module.css';
-import profile from '../styles/scarface.4.jpeg';
 import Comments from '../components/Comments/Comments'
 import SimilarContent from '../components/Similar-content/SimilarContent';
 import { useParams } from 'react-router-dom';
-import { AiFillLike } from 'react-icons/ai';
-import { AiFillDislike } from 'react-icons/ai';
 import { getVideoDataForPlayerPage } from '../helpers/RequestHelper';
+import Button from 'react-bootstrap/Button';
 
 
 import axios from 'axios';
 import AddCommentForm from '../components/Forms/AddCommentForm';
+import VideoTitleDiv from '../components/VideoPlayerPage/VideoTitleDIv';
 
 export default function VideoPlayerPage() {
-    const { videoId } = useParams();
-    console.log("video id is ", videoId);
+    const { videoID } = useParams();
+    console.log("video id is ", videoID);
     const playerRef = React.useRef(null);
 
     const [videoData, setVideoData] = React.useState(null);
 
     React.useEffect(() => {
         async function getVideoData() {
-            const result = await getVideoDataForPlayerPage(videoId)
+            const result = await getVideoDataForPlayerPage(videoID)
             setVideoData(result)
             console.log("fetched video data is ", result)
         };
@@ -41,7 +38,7 @@ export default function VideoPlayerPage() {
         fluid: true,
         sources: [{
             // src: 'http://192.168.1.39:4000/video'
-            src: `http://localhost:4000/watch/${videoId}`,
+            src: `http://localhost:4000/watch/${videoID}`,
             type: 'video/mp4'
         }]
     };
@@ -71,56 +68,14 @@ export default function VideoPlayerPage() {
                         </Row>
                         <Row>
                             <Col>
-                                <div className={divStyles.titleDiv}>
-                                    <div>
-                                        <h4><p>{videoData ? videoData.title : "video title"}</p></h4>
-                                        <Row className={divStyles.videoStats}>
-                                            <Col className={divStyles.videoPlayerViews}>
-                                                Views: {videoData ? videoData.views : '0'}
-                                            </Col>
-                                            <Col className={divStyles.videoPlayerLikesDislikes} xs lg={2}>
-                                                <AiFillLike />
-                                                Likes: {videoData ? videoData.likes.length : '0'}
-                                                {console.log("likes for this video", videoData ? videoData.likes.length : '0')}
-                                            </Col>
-                                            <Col className={divStyles.videoPlayerDislikeDiv} xs lg={2}>
-                                                <AiFillDislike />
-                                                Dislikes:{videoData ? videoData.dislikes.length : '0'}
-                                                {console.log("dislikes for this video", videoData ? videoData.dislikes.length : '0')}
-                                            </Col>
-                                            <hr />
-                                        </Row>
-                                    </div>
-                                    <Row>
-                                        <Accordion flush>
-                                            <Accordion.Header>
-                                                <div className={divStyles.creatorDiv}>
-                                                    <div>
-                                                        <Row>
-                                                            <Col className={divStyles.profileCol} xs={1}>
-                                                                <img className={imageStyles.profileThumbVideoPage} src={profile} />
-                                                            </Col>
-                                                            <Col>
-                                                                <p>{videoData ? videoData.author : "video Author"}</p>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                </div>
-                                            </Accordion.Header>
-                                            <Accordion.Body>
-                                                <div className={divStyles.creatorDivPara}>
-                                                    <p>{videoData ? videoData.description : "Video Description   "}</p>
-                                                </div>
-                                            </Accordion.Body>
-                                        </Accordion>
-                                    </Row>
-                                </div>
+                                {console.log("Video data is ", videoData)}
+                                <VideoTitleDiv videoData={videoData} />
                             </Col>
                         </Row>
                         <hr />
-                        <AddCommentForm videoId={videoId} />
+                        <AddCommentForm videoID={videoID} />
                         <hr />
-                        <Comments videoId={videoId} />
+                        <Comments videoID={videoID} />
                     </Col>
                     <Col md={5} lg={4}>
                         <SimilarContent />

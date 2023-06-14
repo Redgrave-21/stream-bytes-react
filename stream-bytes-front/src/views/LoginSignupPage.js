@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Children } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -11,14 +11,14 @@ export default function LoginSignupPage() {
 
 
     function changeCard() {
-            setShowLoginDiv(!showLoginDiv);
+        setShowLoginDiv(!showLoginDiv);
     }
     return (
         <Container fluid>
             <Row>
                 <Col>
-                    {showLoginDiv ? <LoginForm /> : <SignUpForm/>}
-                    <Button  onClick={changeCard}>{showLoginDiv? 'SignUp instead !':'Login instead !'}</Button>
+                        {showLoginDiv ? <LoginForm /> : <SignUpForm />}
+                    <Button onClick={changeCard}>{showLoginDiv ? 'SignUp instead !' : 'Login instead !'}</Button>
                 </Col>
             </Row>
         </Container>
