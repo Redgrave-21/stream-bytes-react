@@ -110,7 +110,7 @@ async function postVideoUploadForm(formData) {
 }
 
 /**Post update video form */
-async function postUpdateVideoForm(videoID,formData) {
+async function postUpdateVideoForm(videoID, formData) {
     console.log(videoID)
     console.log(formData);
     return await service.post(`/video/${videoID}/update`,
@@ -141,5 +141,7 @@ async function getUserData() {
 
 }
 
-export { getIndexPageVideos, getVideoDataForPlayerPage, getVideoComments, postNewCommentForm, postNewUserForm, postLoginForm, postVideoUploadForm, getUserData,
-    postUpdateVideoForm };
+export {
+    getIndexPageVideos, getVideoDataForPlayerPage, getVideoComments, postNewCommentForm, postNewUserForm, postLoginForm, postVideoUploadForm, getUserData,
+    postUpdateVideoForm
+};

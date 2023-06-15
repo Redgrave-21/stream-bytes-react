@@ -17,7 +17,7 @@ export default function LoginSignupPage() {
         <Container fluid>
             <Row>
                 <Col>
-                        {showLoginDiv ? <LoginForm /> : <SignUpForm />}
+                    {showLoginDiv ? <LoginForm /> : <SignUpForm />}
                     <Button onClick={changeCard}>{showLoginDiv ? 'SignUp instead !' : 'Login instead !'}</Button>
                 </Col>
             </Row>
