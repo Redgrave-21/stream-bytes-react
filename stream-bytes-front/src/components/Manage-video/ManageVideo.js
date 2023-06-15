@@ -32,7 +32,7 @@ export default function ManageVideo() {
         // console.log("formdata is ", Object.fromEntries(formData));
         const actualFormData = Object.fromEntries(formData);
         await postUpdateVideoForm(videoID, actualFormData).then(
-            (res)=>{
+            (res) => {
                 console.log("response from postUpdateVideoForm", res);
                 console.log("response status is ", res.status);
                 console.log("response data is ", res.data);
@@ -41,11 +41,11 @@ export default function ManageVideo() {
     }
 
     function handleTitleInput(event) {
-        setExistingVideoData({ title: event.target.value });
+        setExistingVideoData({ ...existingVideoData, title: event.target.value });
     }
 
     function handleDescriptionInput(event) {
-        setExistingVideoData({ description: event.target.value });
+        setExistingVideoData({ ...existingVideoData, description: event.target.value });
     }
 
     return (
@@ -58,7 +58,7 @@ export default function ManageVideo() {
                             {/* <input type="hidden" name="videoID" value={existingVideoData.videoID} /> */}
                         </div>
                         <div className={formStyles.formElement}>
-                            <label htmlFor="videoTitle" name="videoTitle" classname={formStyles.formElementLabel}> add new video title here</label>
+                            <label htmlFor="videoTitle" name="videoTitle" className={formStyles.formElementLabel}> add new video title here</label>
                             <input type="text" placeholder="video title" value={existingVideoData.title} name="videoTitle" onChange={handleTitleInput} className={formStyles.formElementInput}></input>
                         </div>
 

@@ -111,6 +111,7 @@ async function postVideoUploadForm(formData) {
 
 /**Post update video form */
 async function postUpdateVideoForm(videoID,formData) {
+    console.log(videoID)
     console.log(formData);
     return await service.post(`/video/${videoID}/update`,
         { formData },

@@ -214,5 +214,10 @@ function convertCodec(fileid) {
     })
 }
 
+// Report content
+router.post("/report/:id", async(req,res)=>{
+    console.log(req.body);
+    res.status(200).json("report Pinged");
+})
 
 module.exports = router;

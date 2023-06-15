@@ -5,6 +5,7 @@ const fs = require('fs');
 const videoModel = require('../models/videoModel');
 const commentModel = require('../models/commentModel');
 const verifyToken = require('./verifyToken');
+const mongoose = require('mongoose');
 
 
 /** watch video */
@@ -84,18 +85,20 @@ router.get('/video/:id/comments', async (req, res) => {
 
 
 /** update existing video details */
-router.post('/video/:id/update',  async (req, res)=>{
-    try{
+router.post('/video/:id/update', async (req, res) => {
+    try {
         console.log(req.body);
         const formData = req.body.formData;
-        const videoID = req.params.id;
+        console.log(req.params);
+        const videoID = new mongoose.Types.ObjectId(req.params.id);
+        console.log(videoID);
         // videoToUpdate = await videoModel.findOne({_id:videoID});
         // console.log(videoToUpdate);
-        const updatedVideo = await videoModel.findOneAndUpdate({_id:req.params.id}, {$set:{title:formData.videoTitle, description:formData.videoDescription}});
+        const updatedVideo = await videoModel.findOneAndUpdate({ _id: videoID }, { $set: { title: formData.videoTitle, description: formData.videoDescription } }, { new: true });
         await updatedVideo.save();
         console.log(updatedVideo)
     }
-    catch(e){
+    catch (e) {
         console.log("error occured when trying to update a video", e);
     }
 })
