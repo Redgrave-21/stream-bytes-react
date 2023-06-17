@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 
 
 export const AuthContextProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState({isAuthenticated:false, UID:''});
+    const [isAuthenticated, setIsAuthenticated] = useState({ isAuthenticated: false, UID: '' });
 
     console.log("AuthCOntext", AuthContext);
     // useEffect(() => {

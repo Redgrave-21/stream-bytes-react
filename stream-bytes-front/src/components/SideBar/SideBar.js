@@ -29,6 +29,7 @@ export default function SideBar() {
         <Offcanvas.Body>
           <ul>
             {/* <li onClick={gotoLibrary}> Library</li> */}
+            <li><Link to="/">Home</Link></li>
             <li><Link to="/Login">Login</Link></li>
             <li><Link to="/Library">Library</Link></li>
             <li><Link to="/Account">Account</Link></li>

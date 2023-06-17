@@ -78,7 +78,7 @@ app.use(session({
     saveUninitialized: false,
     // store: new SQLiteStore({db:"sessions.db", dir:'./var/db'})
     store: MongoStore.create({ mongoUrl: dbName, collectionName: "sessions" }),
-    cookie: { maxAge: 30000, httpOnly: false },
+    cookie: { maxAge: 3600000, httpOnly: false },
 
 }));
 

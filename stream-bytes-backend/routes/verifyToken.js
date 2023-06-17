@@ -14,8 +14,7 @@ const verifyToken = function(token){return  jwt.verify(token, "69420");}
 //         if (decodedToken) {
 //             console.log("decoded token is ", decodedToken);
 //             return decodedToken;
-//         }
-//     })
+//         }33.00
 // }
 
 module.exports = verifyToken;

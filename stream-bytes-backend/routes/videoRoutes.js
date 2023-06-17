@@ -87,16 +87,18 @@ router.get('/video/:id/comments', async (req, res) => {
 /** update existing video details */
 router.post('/video/:id/update', async (req, res) => {
     try {
-        console.log(req.body);
+        // console.log(req.body);
         const formData = req.body.formData;
-        console.log(req.params);
+        // console.log(req.params);
+        // const videoToUpdate = req.params.id;
         const videoID = new mongoose.Types.ObjectId(req.params.id);
+        // const videoID = req.params.id;
         console.log(videoID);
         // videoToUpdate = await videoModel.findOne({_id:videoID});
         // console.log(videoToUpdate);
         const updatedVideo = await videoModel.findOneAndUpdate({ _id: videoID }, { $set: { title: formData.videoTitle, description: formData.videoDescription } }, { new: true });
-        await updatedVideo.save();
-        console.log(updatedVideo)
+        // await updatedVideo.save();
+        // console.log(updatedVideo)
     }
     catch (e) {
         console.log("error occured when trying to update a video", e);

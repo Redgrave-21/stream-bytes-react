@@ -15,6 +15,7 @@ import AccountPage from './views/AccountPage';
 import LoginSignupPage from './views/LoginSignupPage';
 import Library from './components/Account/Library';
 import UploadVideoForm from './components/Forms/UploadVideoForm';
+import AccountSettings from './components/Account/AccountSettings';
 import ManageVideo from './components/Manage-video/ManageVideo';
 import AdminHome from './components/Admin/AdminHome';
 
@@ -31,7 +32,8 @@ function App() {
           <Route path="/account" element={<AccountPage />}></Route>
           <Route path="account/upload" element={<UploadVideoForm />}></Route>
           <Route path="account/manage-video/:videoID" element={<ManageVideo />}></Route>
-          <Route path="/admin/home" element={<AdminHome/>}></Route>
+          <Route path="/admin/home" element={<AdminHome />}></Route>
+          <Route path="account/settings" element={<AccountSettings/>}></Route>
         </Routes>
       </BrowserRouter>
       {/* <RouterProvider router={router}>

@@ -38,14 +38,19 @@ export default function UploadedVideoCard({ video }) {
                                 <div>
                                     <Row>
                                         <Col>
+                                        <div className='vr'> </div>
                                             Total Likes:{video.likes.length}
-                                        </Col>
-                                        <Col>
                                             <div className='vr'> </div>
-                                            Total Dislikes:{video.dislikes.length}
                                         </Col>
                                         <Col>
-                                            Total Videos:{video.views}
+                                        <div className='vr'> </div>
+                                            Total Dislikes:{video.dislikes.length}
+                                            <div className='vr'> </div>
+                                        </Col>
+                                        <Col>
+                                        <div className='vr'> </div>
+                                            Total views:{video.views}
+                                            <div className='vr'> </div>
                                         </Col>
                                     </Row>
                                 </div>
