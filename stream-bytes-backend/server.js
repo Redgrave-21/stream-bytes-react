@@ -12,11 +12,11 @@ const logger = require('morgan');
 // const passport = require('passport');
 const session = require('express-session');
 
-// const SQLiteStore = require('connect-sqlite3')(session);
 const MongoStore = require('connect-mongo');
 
 
 const app = express();
+app.use(express.json())
 const port = 4000;
 // const dbPort = 'mongodb://localhost/';
 // const dbCollection = 'streambytes-dev';
@@ -45,10 +45,10 @@ async function connectDB() {
 /** allow cors */
 app.use(cors({
     credentials: true,
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'http://localhost:5173'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     // allowedHeaders: ['Content-Type','application/x-www-form-urlencoded', 'multipart/form-data'],
-    allowedHeaders: ["Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"],
+    allowedHeaders: ["Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization"],
     preflightContinue: true,
     optionsSuccessStatus: 204
 }))
@@ -98,11 +98,11 @@ app.get("/index", async (req, res) => {
     if (req.session) {
         console.log("UID from session is", req.session.id)
     }
-    videos = await videoModel.find().sort({ location: 'asc' });
+    videos = await videoModel.find().sort({ location: 'asc' }).populate('author');
     // res.json(videos);
     // res.json("you are logged in");
     // res.setHeader('set-Cookie', ['type=ninja', 'language=javascript; HttpOnly', 'sameSite:none']);
-    res.status(200).json(videos);
+    res.status(200).json({ videos });
     // res.render('index', {title:'Stream Bytes', videos:videos});
 })
 

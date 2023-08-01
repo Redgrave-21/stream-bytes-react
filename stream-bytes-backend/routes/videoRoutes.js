@@ -58,9 +58,9 @@ router.get('/video/:id/data', async (req, res) => {
     // if(verifyToken(req.cookies.access_token)){
     try {
         console.log("id from send video information ", req.params.id)
-        const videoData = await videoModel.findById(req.params.id);
+        const videoData = await videoModel.findById(req.params.id).populate('author');
         // res.json({ staus: 200, vidoData: videoData });
-        res.status(200).json(videoData);
+        res.status(200).json({videoData:videoData});
     }
     catch (err) {
         console.log("error from send video information function", err);
@@ -73,9 +73,11 @@ router.get('/video/:id/data', async (req, res) => {
 router.get('/video/:id/comments', async (req, res) => {
     try {
         console.log("video id from comments route", req.params.id);
-        commentsOfVideo = await videoModel.findById(req.params.id).populate('comments');
+        fetchComments = await videoModel.findById(req.params.id).populate('comments')
+        comments = await fetchComments.populate('author');
+        console.log(comments)
         // res.json(commentsOfVideo);
-        res.status(200).json(commentsOfVideo);
+        res.status(200).json({comments});
     }
     catch (error) {
         console.log("error from fetch comment function", error);
@@ -87,17 +89,27 @@ router.get('/video/:id/comments', async (req, res) => {
 /** update existing video details */
 router.post('/video/:id/update', async (req, res) => {
     try {
-        // console.log(req.body);
-        const formData = req.body.formData;
-        // console.log(req.params);
-        // const videoToUpdate = req.params.id;
-        const videoID = new mongoose.Types.ObjectId(req.params.id);
-        // const videoID = req.params.id;
-        console.log(videoID);
-        // videoToUpdate = await videoModel.findOne({_id:videoID});
-        // console.log(videoToUpdate);
-        const updatedVideo = await videoModel.findOneAndUpdate({ _id: videoID }, { $set: { title: formData.videoTitle, description: formData.videoDescription } }, { new: true });
-        // await updatedVideo.save();
+        console.log(req.body);
+        const data = req.body.data
+        const videoID = new mongoose.Types.ObjectId(req.params.id)
+        if(data.videoTitle && data.description){
+            const newTitle = data.videoTitle
+            const updatedDescription = data.description
+            const updatedVideo = await videoModel.findOneAndUpdate({ _id: videoID }, { $set: { title: newTitle, description: newDescription } }, { new: true });
+            await updatedVideo.save();
+        }
+        else if(data.videoTitle){
+            const newTitle= data.videoTitle
+            const updatedVideo = await videoModel.findOneAndUpdate({ _id: videoID }, { $set: { title: newTitle} }, { new: true });
+            await updatedVideo.save();
+        }
+        else if(data.description){
+            const newDescription = data.description
+            const updatedVideo = await videoModel.findOneAndUpdate({ _id: videoID }, { $set: { description: newDescription } }, { new: true });
+            await updatedVideo.save();
+        }
+        // console.log(videoID);
+        // const updatedVideo = await videoModel.findOneAndUpdate({ _id: videoID }, { $set: { title: data.videoTitle, description: data.videoDescription } }, { new: true });
         // console.log(updatedVideo)
     }
     catch (e) {

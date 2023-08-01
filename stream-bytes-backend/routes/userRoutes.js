@@ -15,27 +15,28 @@ const auth = require('../auth/auth');
 const userModel = require('../models/userModel');
 const videoModel = require('../models/videoModel');
 const commentModel = require('../models/commentModel');
+const { verify } = require('crypto');
 
 
 // get user data
-router.get('/user/home', isAuthenticated, async (req, res) => {
+router.get('/user/home', verifyToken, async (req, res) => {
     try {
         // console.log(req.session.UID);
         // UID = "6437bc24386d373c9eed1d3a"
         // console.log("id fetched from  request is ", req.params.UID);
         // UID = req.params.id
         // console.log("uid from req is ", UID);
-        const UID = req.session.UID;
-        console.log("id fetched from session is", req.session.UID);
-        // console.log("user id fetched from req object",req.uid)
+        // const UID = decodedToken.UID;
+        console.log("id fetched from session is", res.locals.decodedToken);
+        const UID = res.locals.decodedToken.UID;
         let currentUser = await userModel.findOne({ _id: UID }).populate('videos').populate('playlist');
         if (currentUser) {
-            console.log(currentUser);
-            console.log(currentUser.userName)
-            res.status(200).json(currentUser)
+            // console.log(currentUser);
+            // console.log(currentUser.userName)
+            return res.status(200).json(currentUser)
         }
-        console.log("id is not defined");
-        res.status(500).status("request id is not defined");
+        // console.log("id is not defined");
+        return res.status(500).json("user with UID does not exist");
     }
     catch (e) {
         console.log("error from home route", e);
@@ -46,12 +47,11 @@ router.get('/user/home', isAuthenticated, async (req, res) => {
 /**new user signup */
 router.post('/user/signup', async (req, res) => {
     try {
-        console.log(req.body);
         const formData = req.body.formData;
         console.log(formData);
         // let { emailId, userName, password1 } : {req.body.emailId, req.body.userName};
-        const formEmailId = formData.emailID.toLowerCase();
-        const formUserName = formData.userName;
+        const formEmailId = formData.emailId.toLowerCase();
+        const formUserName = formData.username;
         const formPassword1 = formData.password1;
         console.log('data obtained from form is ', formEmailId, formUserName, formPassword1);
         const existingUser = await userModel.findOne({ emailId: formEmailId })
@@ -64,10 +64,10 @@ router.post('/user/signup', async (req, res) => {
             await userModel.create({
                 userName: formUserName,
                 emailId: formEmailId,
-                password: bcrypt.hashSync(password, 3)
+                password: bcrypt.hashSync(formPassword1, 3)
             }).then((resolved, rejected) => {
                 if (resolved) {
-                    res.status(200).json("user Created success fully");
+                    res.status(200).json("user Created successfully");
                     console.log('user created')
                 }
                 else if (rejected) {
@@ -86,7 +86,7 @@ router.post('/user/signup', async (req, res) => {
 /** add comment to a video
  * add authentication to this route later
  */
-router.post('/video/:id/comments', isAuthenticated, async (req, res) => {
+router.post('/video/:id/comments', verifyToken, async (req, res) => {
     try {
         const formData = req.body;
         // console.log("form data recieved from the request is:", formData);
@@ -126,19 +126,17 @@ router.post('/video/:id/comments', isAuthenticated, async (req, res) => {
         console.log("Error occured when trying to add comment to video", error);
     }
     // }
-
-
 });
 
 // upload new video
-router.post('/user/upload', isAuthenticated, upload.single('file'), async (req, res, next) => {
+router.post('/user/upload', verifyToken, upload.single('file'), async (req, res, next) => {
     try {
-        console.log("form body is ", req.body)
-        console.log(req.file);
+        console.log("form body is ", req.body.data)
+        console.log(req.body.data.file);
         next();
     }
     catch (err) {
-        console.log("Error occured when trying to add comment to video", err);
+        console.log("Error occured when trying to upload", err);
 
     }
 }, saveVideo()
@@ -147,12 +145,12 @@ router.post('/user/upload', isAuthenticated, upload.single('file'), async (req, 
 
 function saveVideo() {
     return async (req, res) => {
-        const formData = req.body;
-        const file = req.file;
+        const formData = req.body.data;
+        const file = req.body.data.file;
         console.log("file recieved from request is", file)
         console.log(formData.title, formData.description);
         // const uid = '6437bc24386d373c9eed1d3a';
-        const userID = res.session.UID;
+        const userID = res.locals.decodedToken.UID;
         console.log(userID)
         const User = await userModel.findOne({ _id: userID });
         console.log("found user is", User);
@@ -215,9 +213,45 @@ function convertCodec(fileid) {
 }
 
 // Report content
-router.post("/report/:id", async(req,res)=>{
+router.post("/report/:id", verifyToken, async (req, res) => {
     console.log(req.body);
     res.status(200).json("report Pinged");
+})
+
+// fetch account data
+router.post('/user/:id/data', verifyToken, async (req, res) => {
+    const userID = req.params.id
+    const foundUser = await userModel.findOne({ _id: userID })
+    console.log(foundUser)
+})
+
+// upload profile picture
+router.post('/user/:id/update/profile/picute', async (req, res) => {
+    const data = req.body
+    console.log(data)
+})
+
+// change username
+router.post('/user/:id/update-username', verifyToken, async (req, res) => {
+    console.log('user to update is', req.params.id)
+    console.log('user to update is', req.body)
+    const UID = req.params.id
+    const newUsername = req.body.data.username
+    const updatedUser = await userModel.findOneAndUpdate({ _id: UID }, { $set: { userName: newUsername } }, { new: true })
+    await updatedUser.save()
+    return res.status(200).json("username changed successfully")
+})
+
+// generate reports
+router.post('/user/report', verifyToken, async(req, res)=>{
+    // const UID = req.params.id
+    const UID=res.locals.decodedToken.UID
+    console.log(UID)
+    const report = await userModel.findById(UID).populate({path:'videos', populate:[
+        {path:'likes'},
+        {path:'dislikes'}
+    ]})
+    console.log(report)
 })
 
 module.exports = router;
