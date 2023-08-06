@@ -1,13 +1,24 @@
 import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { postVideoUploadForm } from '../Request-helper/RequestHelper';
 
 const UpdateVideoForm = () => {
     const { videoID } = useParams()
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const [uploadProgress, setUploadProgress] = useState(0);
+
 
     const onSubmit = data => {
-        postVideoUploadForm(data)
+        postVideoUploadForm(data, progressEvent => {
+            const progressPercentage = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setUploadProgress(progressPercentage);
+        }).then(res => {
+            console.log(res)
+            alert("file upload successfully")
+        }).catch(err => {
+            console.log("error during upload", err)
+        })
     }
 
     // const onSubmit = (videoID, data) => {
@@ -41,6 +52,9 @@ const UpdateVideoForm = () => {
                         <div className='row mb-3'>
                             <div className='col'>
                                 <button type='submit'>Upload video</button>
+                                {uploadProgress ? <>
+                                    <p>{uploadProgress}</p>
+                                </> : null}
                             </div>
                         </div>
                     </form>

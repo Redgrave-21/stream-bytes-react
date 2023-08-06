@@ -53,6 +53,8 @@ router.get('/watch/:id', async (req, res) => {
     }
 })
 
+
+
 /** send video information for player page*/
 router.get('/video/:id/data', async (req, res) => {
     // if(verifyToken(req.cookies.access_token)){

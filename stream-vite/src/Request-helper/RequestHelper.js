@@ -17,6 +17,14 @@ const getIndexPageVideos = async (...args) => service.get(...args, { withCredent
     return err
 })
 
+/**function to fetch all movies on index page  */
+const getMovies = async (...args) => service.get(...args, { withCredentials: true }).then(
+    res => { return res.data }
+).catch(err => {
+    console.log("error occured when trying to fetch movies", err)
+    return err
+})
+
 /** fetch video data for player page */
 const getVideoDataForPlayerPage = async (...args) => service.get(...args).then(
     res => { return res.data }
@@ -93,12 +101,28 @@ const postLoginForm = async (data) => {
         })
 }
 
+/**logout function */
+const logout = () => {
+    localStorage.removeItem('access_token')
+    alert("you are logged out")
+
+}
+
 /**Post video uplaod */
-async function postVideoUploadForm(data) {
+async function postVideoUploadForm(data, onUploadProgress) {
     console.log(data);
     return await service.post('/user/upload',
-        {data},
-        { headers: { 'Content-Type': 'multipart/form-data' } },
+        {
+            videoTitle: data.videoTitle,
+            videoDescription: data.videoDescription,
+            file: data.file[0]
+        },
+        {
+            headers: {
+                'Content-Type': 'multipart/form-data', 'Authorization': `${localStorage.getItem('access_token')}`,
+                onUploadProgress,
+            }
+        },
     )
         .then(function (res) {
             console.log(res);
@@ -117,6 +141,29 @@ async function postUpdateVideoForm(videoID, data) {
     return await service.post(`/video/${videoID}/update`,
         { data },
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+    )
+        .then(function (res) {
+            console.log(res);
+            return (res);
+        })
+        .catch(function (err) {
+            console.log(err)
+            return err.response;
+        })
+}
+
+/**post movie upload form */
+async function postMovieUploadForm(data) {
+    console.log(data);
+    return await service.post('/user/upload-movie',
+        {
+            movieTitle: data.movieTitle,
+            movieYear: data.movieYear,
+            movieDescription: data.movieDescription,
+            file: data.file[0]
+
+        },
+        { headers: { 'Content-Type': 'multipart/form-data' } },
     )
         .then(function (res) {
             console.log(res);
@@ -178,6 +225,7 @@ const postChangeUserName = async (userID, data) => {
 const generateUserReport = async () => {
     return await service.post(`/user/report`,)
         .then(res => {
+            console.log(res.data.report)
             return res
         })
         .catch(err => {
@@ -186,5 +234,5 @@ const generateUserReport = async () => {
 }
 export {
     getIndexPageVideos, getVideoDataForPlayerPage, getVideoComments, postNewCommentForm, postNewUserForm, postLoginForm, postVideoUploadForm, getUserData,
-    postUpdateVideoForm, getVideoToUpdate, postUpdateProfilePic, postChangeUserName, generateUserReport
+    postUpdateVideoForm, getVideoToUpdate, postUpdateProfilePic, postChangeUserName, generateUserReport, postMovieUploadForm, getMovies, logout
 };

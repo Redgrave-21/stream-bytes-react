@@ -11,9 +11,12 @@ import ManageVideo from './components/ManageVideo'
 import AccountSettings from './components/AccountSettings'
 import ChangePicForm from './components/ChangePicForm'
 import AdminHome from './components/AdminHome'
+import MovieUploadForm from './components/MovieUploadForm'
+import MovieIndex from './components/MovieIndex'
+import useAuthStore from './components/Context/AuthContext'
 
 function App() {
-
+  const [loggedIn] = useAuthStore((state) => [state.loggedIn])
   return (
     <>
       <BrowserRouter>
@@ -22,15 +25,18 @@ function App() {
         <div className='mt-5 pt-5'>
           <Routes>
             <Route path="/" element={<Index />}></Route>
+            <Route path="/movies" element={<MovieIndex />}></Route>
             <Route path="/watch/:videoId" element={<VideoPlayerPage />}></Route>
-            <Route path="/login" element={<Login />}></Route>
-            <Route path='/register' element={<Signup />}></Route>
-            <Route path="/account" element={<AccountHome />}></Route>
-            <Route path="/account/settings" element={<AccountSettings/>}></Route>
-            {/* <Route path="/account/settings/change-profile-picture" element={<ChangePicForm/>}></Route> */}
-            <Route path="/account/upload" element={<UploadVideoForm />}></Route>
-            <Route path="/account/manage-video/:videoID" element={<ManageVideo />}></Route>
-            <Route path="/admin/home" element={<AdminHome />}></Route>
+            {loggedIn ? <>
+              <Route path="/account" element={<AccountHome />}></Route>
+              <Route path="/account/settings" element={<AccountSettings />}></Route>
+              {/* <Route path="/account/settings/change-profile-picture" element={<ChangePicForm/>}></Route> */}
+              <Route path="/account/upload" element={<UploadVideoForm />}></Route>
+              <Route path="/account/upload-movie" element={<MovieUploadForm />}></Route>
+              <Route path="/account/manage-video/:videoID" element={<ManageVideo />}></Route>
+              <Route path="/admin/home" element={<AdminHome />}></Route></> : <><Route path="/login" element={<Login />}></Route>
+              <Route path='/register' element={<Signup />}></Route>
+              </>}
             {/*<Route path="/Library" element={<Library />}></Route>
           <Route path="account/settings" element={<AccountSettings/>}></Route> */}
           </Routes>

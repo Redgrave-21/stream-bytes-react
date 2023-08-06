@@ -30,6 +30,7 @@ const userRouter = require('./routes/userRoutes');
 const authRouter = require('./auth/auth');
 const verifyToken = require('./routes/verifyToken');
 const isAuthenticated = require('./routes/verifySession');
+const movieModel = require('./models/movieModel');
 
 const imagesLocation = path.join(__dirname, "images");
 const config = path.join(__dirname, "config");
@@ -114,8 +115,18 @@ app.get('/sendimage/:imgName', async (req, res) => {
     res.sendFile(imageToSend);
 });
 
-
-
+app.get("/indexMovies", async (req, res) => {
+    let movies = [];
+    if (req.session) {
+        console.log("UID from session is", req.session.id)
+    }
+    movies = await movieModel.find().sort({ location: 'asc' }).populate('author');
+    console.log(movies)
+    // res.json("you are logged in");
+    // res.setHeader('set-Cookie', ['type=ninja', 'language=javascript; HttpOnly', 'sameSite:none']);
+    res.status(200).json({ movies });
+    // res.render('index', {title:'Stream Bytes', videos:videos});
+})
 
 app.listen(port, () => console.log(`running on port ${port}`));
 connectDB();

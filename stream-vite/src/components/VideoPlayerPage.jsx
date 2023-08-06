@@ -7,7 +7,7 @@ import VideoTitleSection from './VideoTitleSection';
 import AddCommentForm from './AddCommentForm';
 import Comments from './Comments';
 import videojs from 'video.js';
-import style from '../styles/video.css'
+// import style from '../styles/video.css'
 import useAuthStore from './Context/AuthContext';
 
 const VideoPlayerPage = () => {

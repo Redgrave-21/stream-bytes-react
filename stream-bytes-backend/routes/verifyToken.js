@@ -8,9 +8,9 @@ const verifyToken = async(req, res, next) => {
     const token = req.headers.authorization.split().toString();
     // const tokenValue = token[1]
     // console.log(token)
+    // console.log(req.headesrs)
     try {
         var decodedToken = jwt.verify(token, "69420")
-        // console.log(decodedToken)
         res.locals.decodedToken = decodedToken;
         next()
     }

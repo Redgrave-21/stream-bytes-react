@@ -1,9 +1,11 @@
 import { useForm } from 'react-hook-form';
 import { postLoginForm } from '../Request-helper/RequestHelper';
 import useAuthStore from './Context/AuthContext';
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 
 const Login = () => {
+    const Navigate = useNavigate()
     // const [isAuthenticated, setIsAuthenticated] = useContext(AuthContext);
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
@@ -19,7 +21,8 @@ const Login = () => {
                 setLoggedIn(res.UID),
                 console.log(loggedIn, UID),
                 localStorage.setItem("access_token", res.token),
-                alert(res.message)
+                alert(res.message),
+                Navigate('/account')
             )
         )
     }
@@ -46,6 +49,9 @@ const Login = () => {
                         </div>
                         <div className='row-mb-3'>
                             <button type='submit'>Login</button>
+                        </div>
+                        <div>
+                        <NavLink to="/register">Register</NavLink>
                         </div>
                     </form>
                 </div>

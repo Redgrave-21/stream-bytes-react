@@ -18,9 +18,21 @@ const AccountHome = () => {
         Navigate('/account/settings', { state: { data } })
     }
 
-    const generateReport = async() => {
-        await generateUserReport()
+    const generateReport = async () => {
+        const report = await generateUserReport();
+        console.log(report)
+    }
 
+    const gotoUploadVideo = () => {
+        Navigate('/account/upload')
+    }
+
+    // const gotoUploadVideoMovie = () => {
+    //     Navigate('/account/upload-movie')
+    // }
+
+    const gotoManageSeries=()=>{
+        Navigate('/account/manage-series')
     }
 
     const { data, error, isLoading } = useSWR(loggedIn ? 'http://localhost:4000/user/home' : null, getUserData);
@@ -44,11 +56,22 @@ const AccountHome = () => {
             <div>
                 {console.log(data)}
                 <h3>Welcome {data.userName}</h3>
-                <div>
-                    <button onClick={gotoSettings}>Settings</button>
-                </div>
-                <div>
-                    <button onClick={generateReport}>Genrate</button>
+                <div style={{ display: "flex" }}>
+                    <div style={{ margin: "10px" }}>
+                        <button onClick={gotoSettings} className='btn btn-warning'>Settings</button>
+                    </div>
+                    <div style={{ margin: "10px" }}>
+                        <button onClick={generateReport}>Genrate report</button>
+                    </div>
+                    <div style={{ margin: "10px" }}>
+                        <button onClick={gotoUploadVideo}>Upload Video</button>
+                    </div>
+                    {/* <div style={{margin:"10px"}}>
+                        <button onClick={gotoUploadVideoMovie}>Upload Movie</button>
+                    </div> */}
+                    <div style={{ margin: "10px" }}>
+                        <button onClick={gotoManageSeries}>Manage Series</button>
+                    </div>
                 </div>
                 {console.log(data._id)}
                 <UploadedVideos uploadedVideos={data.videos} />
