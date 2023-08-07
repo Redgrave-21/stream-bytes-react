@@ -48,17 +48,19 @@ router.get('/user/home', verifyToken, async (req, res) => {
 
 })
 
-/**new user signup */
-router.post('/user/signup', async (req, res) => {
+/**new Admin signup */
+router.post('/admin/signup', async (req, res) => {
     try {
-        const formData = req.body.formData;
+        const formData = req.body;
         console.log(formData);
         // let { emailId, userName, password1 } : {req.body.emailId, req.body.userName};
         const formEmailId = formData.emailId.toLowerCase();
         const formUserName = formData.username;
-        const formPassword1 = formData.password1;
+        const formPassword1 = formData.password;
         console.log('data obtained from form is ', formEmailId, formUserName, formPassword1);
         const existingUser = await userModel.findOne({ emailId: formEmailId })
+        // const existingUser = await userModel.findAll({ role: 'admin' })
+        console.log(existingUser)
         if (existingUser) {
             console.log("output of findOne", existingUser)
             console.log(existingUser.userName)

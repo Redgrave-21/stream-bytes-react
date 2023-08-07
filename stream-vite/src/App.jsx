@@ -14,6 +14,8 @@ import AdminHome from './components/AdminHome'
 import MovieUploadForm from './components/MovieUploadForm'
 import MovieIndex from './components/MovieIndex'
 import useAuthStore from './components/Context/AuthContext'
+import AdminSignup from './components/AdminSignup'
+import AdminLogin from './components/AdminLogin'
 
 function App() {
   const [loggedIn] = useAuthStore((state) => [state.loggedIn])
@@ -34,9 +36,14 @@ function App() {
               <Route path="/account/upload" element={<UploadVideoForm />}></Route>
               <Route path="/account/upload-movie" element={<MovieUploadForm />}></Route>
               <Route path="/account/manage-video/:videoID" element={<ManageVideo />}></Route>
-              <Route path="/admin/home" element={<AdminHome />}></Route></> : <><Route path="/login" element={<Login />}></Route>
+              <Route path="/admin/home" element={<AdminHome />}></Route></> 
+              :
+               <>
+               <Route path="/login" element={<Login />}></Route>
               <Route path='/register' element={<Signup />}></Route>
-              </>}
+              <Route path='/admin-register' element={<AdminSignup />}></Route>
+              <Route path='/admin-login' element={<AdminLogin />}></Route>
+            </>}
             {/*<Route path="/Library" element={<Library />}></Route>
           <Route path="account/settings" element={<AccountSettings/>}></Route> */}
           </Routes>

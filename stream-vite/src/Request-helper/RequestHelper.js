@@ -101,6 +101,49 @@ const postLoginForm = async (data) => {
         })
 }
 
+/**Post admin login form */
+const postAdminForm = async (data) => {
+    // const formData = new FormData()
+    console.log(data)
+    return await service.post('/admin/signup',
+        {
+            emailId: data.emailId,
+            username: data.username,
+            password: data.password1
+        },
+        { headers: {} }).then(
+            res => {
+                console.log(res);
+
+                return (res.data)
+            }
+        ).catch(err => {
+            console.log(err)
+            return (err)
+        })
+}
+
+/** post new admin form */
+const postNewAdminForm = async (data) => {
+    console.log(data)
+    return await service.post('/admin/signup',
+        {
+            emailId: data.emailId,
+            username: data.username,
+            password: data.password,
+        },
+        { headers: {} }).then(
+            res => {
+                console.log(res);
+
+                return (res.data)
+            }
+        ).catch(err => {
+            console.log(err)
+            return (err)
+        })
+}
+
 /**logout function */
 const logout = () => {
     localStorage.removeItem('access_token')
@@ -234,5 +277,6 @@ const generateUserReport = async () => {
 }
 export {
     getIndexPageVideos, getVideoDataForPlayerPage, getVideoComments, postNewCommentForm, postNewUserForm, postLoginForm, postVideoUploadForm, getUserData,
-    postUpdateVideoForm, getVideoToUpdate, postUpdateProfilePic, postChangeUserName, generateUserReport, postMovieUploadForm, getMovies, logout
+    postUpdateVideoForm, getVideoToUpdate, postUpdateProfilePic, postChangeUserName, generateUserReport, postMovieUploadForm, getMovies, logout, postAdminForm,
+    postNewAdminForm
 };
